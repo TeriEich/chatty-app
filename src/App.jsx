@@ -65,10 +65,15 @@ class App extends Component {
       <div>
         <NavBar />
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser.name} _getMessage={this._getMessage} />
+        <ChatBar currentUser={this.state.currentUser.name} _updateUsername={this._updateUsername} _getMessage={this._getMessage} />
       </div>
     );
   }
+
+  _updateUsername = (newUsername) => {
+    const newUser = { name: newUsername };
+    this.setState({ currentUser: newUser });
+  };
 
   _getMessage = (newMessageInput) => {
 
