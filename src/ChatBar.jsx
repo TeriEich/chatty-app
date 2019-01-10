@@ -6,7 +6,7 @@ function ChatBar(props) {
     if (evt.key === 'Enter') {
       const newMessageInput = evt.target.value;
       evt.target.value = '';
-      return props._getMessage(newMessageInput);
+      return props._getMessage(newMessageInput, evt);
     }
   };
 
