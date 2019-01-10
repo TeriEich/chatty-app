@@ -3,7 +3,9 @@ import React, {Component} from 'react';
 function ChatBar(props) {
 
   const _sendNewUsername = evt => {
+    const oldUsername = props.currentUser;
     const newUsername = evt.target.value;
+    console.log(`${oldUsername} has changed their name to ${newUsername}`);
     console.log('newUsername: ', newUsername);
     return props._updateUsername(newUsername);
   };
@@ -18,7 +20,7 @@ function ChatBar(props) {
 
   return (
     <footer className="chatbar" onKeyPress={_messageOnEnter} >
-      <input className="chatbar-username" type="text" name='currentUser' placeholder={props.currentUser} onChange={_sendNewUsername} />
+      <input className="chatbar-username" type="text" name='currentUser' placeholder={props.currentUser} onBlur={_sendNewUsername} />
       <input className="chatbar-message" type="text" name='messageInput' placeholder="Type a message and hit ENTER" />
     </footer>
   );

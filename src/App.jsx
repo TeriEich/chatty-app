@@ -11,8 +11,10 @@ class App extends Component {
     super();
     this.state = {
       // loading: true,
-      currentUser: { name: 'Anonymous'},
-      messages: [],
+      currentUser: {
+        oldName: '',
+        name: 'Anonymous'},
+      messages: []
     };
 
   }
@@ -37,21 +39,29 @@ class App extends Component {
     };
 
     //Logs message whenever the socket receives a message from the server:
-    this.socket.onmessage = payload => {
-      console.log(`Got message from the server: ${payload}`);
-      const json = JSON.parse(payload.data);
+    this.socket.onmessage = event => {
+      console.log(`Got message from the server: ${event}`);
+      const json = JSON.parse(event.data);
       console.log('json: ', json);
 
       switch (json.type) {
-        case 'text-message':
+        case 'incomingMessage':
           this.setState({
-            messages: [...this.state.messages, json],
+            messages: [...this.state.messages, json]
             });
+          break;
+        case 'incomingNotification':
+          this.setState({
+            messages: [...this.state.messages, json]
+          });
           break;
         case 'initial-messages':
           this.setState({ messages: json.messages });
           break;
         default:
+          //show error in console if message type is unknown
+          throw new Error("Unknown event type" + data.type);
+
       }
     };
 
@@ -71,20 +81,25 @@ class App extends Component {
   }
 
   _updateUsername = (newUsername) => {
-    const newUser = { name: newUsername };
+    const oldUsername = this.state.currentUser.name;
+    const newUser = {
+      type: 'postNotification',
+      oldName: oldUsername,
+      name: newUsername };
     this.setState({ currentUser: newUser });
+    this.socket.send(JSON.stringify(newUser));
   };
 
   _getMessage = (newMessageInput) => {
-
+    const username = this.state.currentUser.name;
     const objectToSend = {
-      type: 'text-message',
-      username: this.state.currentUser.name,
+      type: 'postMessage',
+      username: username,
       content: newMessageInput
     };
 
     this.socket.send(JSON.stringify(objectToSend));
-  }
+  };
 }
 
 
