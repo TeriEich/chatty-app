@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 
 function NavBar(props) {
-  console.log('navBar props: ', props);
+  const counter = props.userCount > 1 ? `${props.userCount} users online`
+    : `${props.userCount} user online`;
   return (
     <nav className="navbar">
       <a href="/" className="navbar-brand">Chatty</a>
-      <span className="navbar-counter">{props.users.clientCount} users online</span>
+      <span className="navbar-counter">{counter}</span>
     </nav>
     );
 }

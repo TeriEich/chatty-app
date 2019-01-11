@@ -11,7 +11,7 @@ class App extends Component {
     super();
     this.state = {
       // loading: true,
-      clients: {},
+      clients: '',
       currentUser: {
         name: 'Anonymous'},
       messages: []
@@ -34,13 +34,13 @@ class App extends Component {
     //Creates a new WebSocket
     this.socket = new WebSocket("ws://localhost:3001/");
 
-    this.socket.onopen = event => {
+    this.socket.onopen = () => {
       console.log('Connected to WebSocket');
-      const clientInstance = {
-        type: 'newClientConnected'
-      }
-      this.socket.send(JSON.stringify(clientInstance));
-      console.log('client connect event: ', event);
+      // const clientInstance = {
+        // type: 'newClientConnected'
+      // };
+      // this.socket.send(JSON.stringify(clientInstance));
+      // console.log('client connect event: ', event);
     };
 
     //Logs message whenever the socket receives a message from the server:
@@ -53,7 +53,7 @@ class App extends Component {
         case 'newClientConnected':
           console.log('client - newClient', json.clientCount);
           this.setState({
-            clients: json
+            clients: json.clientCount
           });
           break;
         case 'incomingMessage':
@@ -106,7 +106,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NavBar users={this.state.clients} />
+        <NavBar userCount={this.state.clients} />
         <MessageList messages={this.state.messages} />
         <ChatBar currentUser={this.state.currentUser.name} _postNotification={this._postNotification} _postMessage={this._postMessage} />
       </div>

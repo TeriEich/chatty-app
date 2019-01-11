@@ -39,6 +39,11 @@ wss.broadcast = data => {
 wss.on('connection', ws => {
   console.log('Client connected');
   console.log('wss.clients.size: ', wss.clients.size);
+  const objectToBroadcast = {
+    type: 'newClientConnected',
+    clientCount: wss.clients.size
+  }
+  wss.broadcastJSON(objectToBroadcast);
 
   // ws.on('connection', data => {
   //   console.log('websocket connection data: ', data);
@@ -55,17 +60,13 @@ wss.on('connection', ws => {
     console.log('objData: ', objData);
 
     switch (objData.type) {
-      case 'newClientConnected':
-        const updateToBroadcast = {
-          clientCount: wss.clients.size,
-          // clientInfo: {
-            // id: uuidv4(),
-            type: 'newClientConnected'
-          // }
-        };
-        // messageDatabase.push(updateToBroadcast);
-        wss.broadcastJSON(updateToBroadcast);
-        break;
+      // case 'newClientConnected':
+      //   const updateToBroadcast = {
+      //     clientCount: wss.clients.size,
+      //       type: 'newClientConnected'
+      //   };
+      //   wss.broadcastJSON(updateToBroadcast);
+      //   break;
       case 'postMessage':
         console.log(`Got message from the client: User ${objData.username} said ${objData.content}`);
         const objectToBroadcast = {
@@ -80,13 +81,13 @@ wss.on('connection', ws => {
       case 'postNotification':
         console.log(`Got message from the client: ${objData.content}`);
         const objContent = objData.content;
-        const notificationToBroadcast = {
+        objectToBroadcast = {
           id: uuidv4(),
           type: 'incomingNotification',
           content: objContent.toString()
         };
-        messageDatabase.push(notificationToBroadcast);
-        wss.broadcastJSON(notificationToBroadcast);
+        messageDatabase.push(objectToBroadcast);
+        wss.broadcastJSON(objectToBroadcast);
         break;
       default:
     }
@@ -100,6 +101,13 @@ wss.on('connection', ws => {
   ws.send(JSON.stringify(initialMessage));
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected')
+    const objectToBroadcast = {
+      type: 'newClientConnected',
+      clientCount: wss.clients.size
+    }
+  wss.broadcastJSON(objectToBroadcast);
+  });
 });
 
