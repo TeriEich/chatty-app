@@ -11,6 +11,7 @@ class App extends Component {
     super();
     this.state = {
       // loading: true,
+      clients: {},
       currentUser: {
         name: 'Anonymous'},
       messages: []
@@ -33,8 +34,13 @@ class App extends Component {
     //Creates a new WebSocket
     this.socket = new WebSocket("ws://localhost:3001/");
 
-    this.socket.onopen = () => {
+    this.socket.onopen = event => {
       console.log('Connected to WebSocket');
+      const clientInstance = {
+        type: 'newClientConnected'
+      }
+      this.socket.send(JSON.stringify(clientInstance));
+      console.log('client connect event: ', event);
     };
 
     //Logs message whenever the socket receives a message from the server:
@@ -44,6 +50,12 @@ class App extends Component {
       console.log('json: ', json);
 
       switch (json.type) {
+        case 'newClientConnected':
+          console.log('client - newClient', json.clientCount);
+          this.setState({
+            clients: json
+          });
+          break;
         case 'incomingMessage':
           this.setState({
             messages: [...this.state.messages, json]
@@ -94,7 +106,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NavBar />
+        <NavBar users={this.state.clients} />
         <MessageList messages={this.state.messages} />
         <ChatBar currentUser={this.state.currentUser.name} _postNotification={this._postNotification} _postMessage={this._postMessage} />
       </div>

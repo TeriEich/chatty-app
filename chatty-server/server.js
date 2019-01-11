@@ -38,12 +38,34 @@ wss.broadcast = data => {
 // the ws parameter in the callback.
 wss.on('connection', ws => {
   console.log('Client connected');
+  console.log('wss.clients.size: ', wss.clients.size);
+
+  // ws.on('connection', data => {
+  //   console.log('websocket connection data: ', data);
+  //   const clientData = JSON.parse(data);
+  //   const clientDataToBroadcast = {
+  //     type: clientData.type,
+  //     clientCount: wss.clients.size
+  //   }
+  //   broadcastJSON(clientDataToBroadcast);
+  // });
 
   ws.on('message', data => {
     const objData = JSON.parse(data);
     console.log('objData: ', objData);
 
     switch (objData.type) {
+      case 'newClientConnected':
+        const updateToBroadcast = {
+          clientCount: wss.clients.size,
+          // clientInfo: {
+            // id: uuidv4(),
+            type: 'newClientConnected'
+          // }
+        };
+        // messageDatabase.push(updateToBroadcast);
+        wss.broadcastJSON(updateToBroadcast);
+        break;
       case 'postMessage':
         console.log(`Got message from the client: User ${objData.username} said ${objData.content}`);
         const objectToBroadcast = {

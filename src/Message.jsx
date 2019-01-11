@@ -3,7 +3,6 @@ import MessageList from './MessageList.jsx';
 
 class Message extends Component {
   render() {
-    console.log('Message props: ', this.props);
     const message = this.props;
     const username = message.username;
     switch (message.type) {
