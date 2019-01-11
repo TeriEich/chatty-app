@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import NavBar from './NavBar.jsx';
 import ChatBar from './ChatBar.jsx';
-import Message from './Message.jsx';
+// import Message from './Message.jsx';
 import MessageList from './MessageList.jsx';
 
 
@@ -12,7 +12,6 @@ class App extends Component {
     this.state = {
       // loading: true,
       currentUser: {
-        oldName: '',
         name: 'Anonymous'},
       messages: []
     };
@@ -70,27 +69,18 @@ class App extends Component {
     };
   }
 
-  render() {
-    return (
-      <div>
-        <NavBar />
-        <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser.name} _updateUsername={this._updateUsername} _getMessage={this._getMessage} />
-      </div>
-    );
-  }
-
-  _updateUsername = (newUsername) => {
-    const oldUsername = this.state.currentUser.name;
-    const newUser = {
+  _postNotification = (newUsername, oldUsername) => {
+    const newUser = {name: newUsername};
+    console.log('n, o: ', newUsername, oldUsername);
+    const notificationToSend = {
       type: 'postNotification',
-      oldName: oldUsername,
-      name: newUsername };
-    this.setState({ currentUser: newUser });
-    this.socket.send(JSON.stringify(newUser));
+      content: 'User ' + oldUsername + ' changed their name to ' + newUsername
+    };
+    this.setState({ currentUser: newUser})
+    this.socket.send(JSON.stringify(notificationToSend));
   };
 
-  _getMessage = (newMessageInput) => {
+  _postMessage = (newMessageInput) => {
     const username = this.state.currentUser.name;
     const objectToSend = {
       type: 'postMessage',
@@ -100,6 +90,16 @@ class App extends Component {
 
     this.socket.send(JSON.stringify(objectToSend));
   };
+
+  render() {
+    return (
+      <div>
+        <NavBar />
+        <MessageList messages={this.state.messages} />
+        <ChatBar currentUser={this.state.currentUser.name} _postNotification={this._postNotification} _postMessage={this._postMessage} />
+      </div>
+    );
+  }
 }
 
 

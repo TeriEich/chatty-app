@@ -41,6 +41,7 @@ wss.on('connection', ws => {
 
   ws.on('message', data => {
     const objData = JSON.parse(data);
+    console.log('objData: ', objData);
 
     switch (objData.type) {
       case 'postMessage':
@@ -55,13 +56,12 @@ wss.on('connection', ws => {
         wss.broadcastJSON(objectToBroadcast);
         break;
       case 'postNotification':
-        console.log(`Got message from the client: User ${objData.oldName} changed their name to ${objData.name}`);
+        console.log(`Got message from the client: ${objData.content}`);
+        const objContent = objData.content;
         const notificationToBroadcast = {
           id: uuidv4(),
           type: 'incomingNotification',
-          oldName: objData.oldName,
-          name: objData.name,
-          content: `User ${objData.oldName} changed their name to ${objData.name}`
+          content: objContent.toString()
         };
         messageDatabase.push(notificationToBroadcast);
         wss.broadcastJSON(notificationToBroadcast);

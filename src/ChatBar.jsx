@@ -7,14 +7,14 @@ function ChatBar(props) {
     const newUsername = evt.target.value;
     console.log(`${oldUsername} has changed their name to ${newUsername}`);
     console.log('newUsername: ', newUsername);
-    return props._updateUsername(newUsername);
+    return props._postNotification(newUsername, oldUsername);
   };
 
   const _messageOnEnter = evt => {
     if (evt.key === 'Enter') {
       const newMessageInput = evt.target.value;
       evt.target.value = '';
-      return props._getMessage(newMessageInput);
+      return props._postMessage(newMessageInput);
     }
   };
 
