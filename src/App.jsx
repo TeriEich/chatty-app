@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import NavBar from './NavBar.jsx';
 import ChatBar from './ChatBar.jsx';
-// import Message from './Message.jsx';
 import MessageList from './MessageList.jsx';
 
 
@@ -10,7 +9,6 @@ class App extends Component {
   constructor(props) {
     super();
     this.state = {
-      // loading: true,
       clients: '',
       currentUser: {
         name: 'Anonymous'},
@@ -20,38 +18,16 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
-    // setTimeout(() => {
-    //   console.log("Simulating incoming message");
-    //   // Add a new message to the list of messages in the data store
-    //   const newMessage = {id: 5003, username: "Michelle", content: "Hello there!"};
-    //   const messages = this.state.messages.concat(newMessage)
-    //   // Update the state of the app component.
-    //   // Calling setState will trigger a call to render() in App and all child components.
-    //   this.setState({messages: messages})
-    // }, 3000);
 
     //Creates a new WebSocket
     this.socket = new WebSocket("ws://localhost:3001/");
 
-    this.socket.onopen = () => {
-      console.log('Connected to WebSocket');
-      // const clientInstance = {
-        // type: 'newClientConnected'
-      // };
-      // this.socket.send(JSON.stringify(clientInstance));
-      // console.log('client connect event: ', event);
-    };
-
     //Logs message whenever the socket receives a message from the server:
     this.socket.onmessage = event => {
-      console.log(`Got message from the server: ${event}`);
       const json = JSON.parse(event.data);
-      console.log('json: ', json);
 
       switch (json.type) {
         case 'newClientConnected':
-          console.log('client - newClient', json.clientCount);
           this.setState({
             clients: json.clientCount
           });
@@ -76,14 +52,12 @@ class App extends Component {
       }
     };
 
-    this.onclose = () => {
-      console.log('Client disconnected');
-    };
   }
 
+  //sends data for name change to WebSocket server and updates state of current user's name
+  //called in ChatBar.jsx
   _postNotification = (newUsername, oldUsername) => {
     const newUser = {name: newUsername};
-    console.log('n, o: ', newUsername, oldUsername);
     const notificationToSend = {
       type: 'postNotification',
       content: 'User ' + oldUsername + ' changed their name to ' + newUsername
@@ -92,6 +66,8 @@ class App extends Component {
     this.socket.send(JSON.stringify(notificationToSend));
   };
 
+  //sends data for new message to WebSocket server
+  //called in ChatBar.jsx
   _postMessage = (newMessageInput) => {
     const username = this.state.currentUser.name;
     const objectToSend = {
@@ -103,7 +79,9 @@ class App extends Component {
     this.socket.send(JSON.stringify(objectToSend));
   };
 
+
   render() {
+
     return (
       <div>
         <NavBar userCount={this.state.clients} />
@@ -112,6 +90,7 @@ class App extends Component {
       </div>
     );
   }
+
 }
 
 
