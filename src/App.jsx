@@ -68,7 +68,7 @@ class App extends Component {
 
   //sends data for new message to WebSocket server
   //called in ChatBar.jsx
-  _postMessage = (newMessageInput) => {
+  _postMessage = newMessageInput => {
     const username = this.state.currentUser.name;
     const objectToSend = {
       type: 'postMessage',

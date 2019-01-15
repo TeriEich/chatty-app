@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 function ChatBar(props) {
 
@@ -6,7 +6,7 @@ function ChatBar(props) {
   const _sendNewUsername = evt => {
     const oldUsername = props.currentUser;
     const newUsername = evt.target.value;
-    if (newUsername !== oldUsername) {
+    if (newUsername !== oldUsername && newUsername) {
       return props._postNotification(newUsername, oldUsername);
     }
   };
