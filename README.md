@@ -36,8 +36,11 @@ Chatty App is a real time web application using ReactJS and WebSockets.
 
 ## Screenshots
 
+### On initial page load, one user connected:
 !["Screenshot of the app on initial page load, one user connected:"](https://github.com/TeriEich/chatty-app/blob/master/docs/chatty-app-initial.png?raw=true)
 
+### The app, open in three tabs, with three users connected and sending messages/changing their usernames:
 !["Screenshot of the app (open in three tabs) with three users connected, sending messages, and changing their usernames:"](https://github.com/TeriEich/chatty-app/blob/master/docs/chatty-app-multi.png?raw=true)
 
+### The app, open in two tabs, after a user has left:
 !["Screenshot of the app (open in two tabs) after a user has left:"](https://github.com/TeriEich/chatty-app/blob/master/docs/chatty-app-user-left.png?raw=true)
