@@ -1,45 +1,44 @@
-React Boilerplate
+# Chatty App
 =====================
 
-A minimal and light dev environment for ReactJS.
+Chatty App is a real time web application using ReactJS and WebSockets.
 
-### Usage
+## Usage
 
-Clone the boilerplate and create your own git repo.
+1. Fork and clone this repository.
+2. Install the dependencies using ```npm install```.
+3. Start the WebSockets server from the chatty-server directory using ```npm start```. WebSockets server is hosted at <http://localhost:3001>.
+4. In a new terminal instance, start the client server from the chatty-app directory using ```npm start```.
+5. Open <http://localhost:3000>.
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+## Dependencies
 
-Install the dependencies and start the server.
+### Root Directory
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
+* babel-core
+* babel-loader
+* babel-preset-es2015
+* babel-preset-react
+* css-loader
+* node-sass
+* sass-loader
+* sockjs-client
+* style-loader
+* webpack
+* webpack-dev-server
+* react
+* react-dom
 
-### Static Files
+### WebSockets Server Directory
 
-You can store static files like images, fonts, etc in the `build` folder.
+* express
+* ws
+* uuid
 
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
+## Screenshots
 
-### Linting
+!["Screenshot of the app on initial page load, one user connected:"]()
 
-This boilerplate project includes React ESLint configuration.
+!["Screenshot of the app with three users connected, sending messages, and changing their usernames:"]()
 
-```
-npm run lint
-```
-
-### Dependencies
-
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+!["Screenshot of the app after a user has left:"]()
